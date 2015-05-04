@@ -1,23 +1,26 @@
-#include <openssl/asn1.h>
+#inclide<openssl/asn1.h>
+#include <openssl/objects.h>
 
 int main(int argc, char const *argv[])
 {
-	ASN1_OBJECT *obj;
-	const unsigned char *oid= "1.2.840.113549.2.5";
-	unsigned char *buf, *p;
+	
+	ASN1_OBJECT *obj = NULL;
 	unsigned char txt[32];
-	int i, no_name = 1, len;
-	obj= OBJ_txt2obj(oid, no_name);
-	len = i2d_ASN1_OBJECT(obj, NULL);
-	p = buf = malloc(len);
-	len = i2d_ASN1_OBJECT(obj, &buf);
-	for (i = 0; i < len; ++i)
-	{
-		printf("%02x\t", p[i]);
-	}
-	len = OBJ_obj2txt(txt, 32, obj, 0);
-	printf("oid text =%s\n", txt);
+	int len;
+	const char *oid = "1.2.840.113549.2.5";
+	int i, no_name= 1;
+
+	obj = OBJ_txt2obj(oid, no_name);
 	len = OBJ_obj2txt(txt, 32, obj, 1);
+	printf("oid txt = %s\n", txt);
+
+	i = OBJ_nid2obj(NID_pkcs7);
+	printf("sn = %s\n", obj->sn);
+	printf("ln= %s\n", obj->ln);
+	len = OBJ_obj2txt(txt, 32, obj,1);
 	printf("oid text = %s\n", txt);
+	////////
+
+	ASN1_OBJECT_free(obj);
 	return 0;
 }
